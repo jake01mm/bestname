@@ -124,43 +124,69 @@ generateBtn.addEventListener('click', async () => {
     // 设置按钮加载状态
     setButtonLoading(true, '正在生成...');
 
-    // 发送请求
-    const response = await fetch('/api/generate', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        startsWith,
-        excludeLetters,
-        minLength,
-        maxLength,
-        fixedLength,
-        count,
-        enableAI
-      })
-    });
-
-    const result = await response.json();
-
-    if (!result.success) {
-      throw new Error(result.error);
-    }
-
-    addLog(`✓ 生成完成: ${result.data.totalGenerated}个域名`, 'success');
-    addLog(`✓ 可用域名: ${result.data.totalAvailable}个`, 'success');
+    // 发送请求（设置超时）
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 120000); // 2分钟超时
     
-    if (result.data.scored > 0) {
-      addLog(`✓ AI评分完成: ${result.data.scored}个域名`, 'success');
-    }
+    try {
+      const response = await fetch('/api/generate', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          startsWith,
+          excludeLetters,
+          minLength,
+          maxLength,
+          fixedLength,
+          count,
+          enableAI
+        }),
+        signal: controller.signal
+      });
 
-    // 显示结果
-    displayResults(result.data);
+      clearTimeout(timeoutId);
+
+      if (!response.ok) {
+        throw new Error(`服务器错误: ${response.status}`);
+      }
+
+      const result = await response.json();
+
+      if (!result.success) {
+        throw new Error(result.error);
+      }
+
+      addLog(`✓ 生成完成: ${result.data.totalGenerated}个域名`, 'success');
+      addLog(`✓ 可用域名: ${result.data.totalAvailable}个`, 'success');
+      
+      if (result.data.scored > 0) {
+        addLog(`✓ AI评分完成: ${result.data.scored}个域名`, 'success');
+      }
+
+      // 显示结果
+      displayResults(result.data);
+    } catch (fetchError) {
+      clearTimeout(timeoutId);
+      throw fetchError;
+    }
 
   } catch (error) {
     console.error('生成失败:', error);
-    addLog(`✗ 生成失败: ${error.message}`, 'error');
-    alert('生成失败: ' + error.message);
+    
+    // 更详细的错误信息
+    let errorMessage = '生成失败';
+    if (error.message === 'Failed to fetch') {
+      errorMessage = '网络连接失败，请检查网络连接后重试';
+    } else if (error.message.includes('timeout')) {
+      errorMessage = '请求超时，请稍后重试';
+    } else {
+      errorMessage = `生成失败: ${error.message}`;
+    }
+    
+    addLog(`✗ ${errorMessage}`, 'error');
+    alert(errorMessage);
   } finally {
     isGenerating = false;
     setButtonLoading(false);
