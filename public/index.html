@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>智能域名生成器</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>🌐 智能域名生成器</h1>
+      <p>AI驱动的域名生成、检测和评分工具</p>
+      <div style="margin-top: 20px; position: relative; z-index: 10;">
+        <a href="/library.html" class="library-link">
+          📚 查看域名库
+        </a>
+      </div>
+    </header>
+
+    <div class="config-panel">
+      <h2>生成配置</h2>
+      
+      <div class="form-group">
+        <label>起始字母</label>
+        <input type="text" id="startsWith" value="n" maxlength="1" placeholder="例如: n">
+      </div>
+
+      <div class="form-group">
+        <label>排除字母（用逗号分隔）</label>
+        <input type="text" id="excludeLetters" value="l,z,x,y,g,p,q" placeholder="例如: l,z,x">
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>最小长度</label>
+          <input type="number" id="minLength" value="4" min="2" max="20">
+        </div>
+        <div class="form-group">
+          <label>最大长度</label>
+          <input type="number" id="maxLength" value="8" min="2" max="20">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>固定长度（可选，留空则使用范围）</label>
+        <input type="number" id="fixedLength" placeholder="例如: 5" min="2" max="20">
+      </div>
+
+      <div class="form-group">
+        <label>生成数量</label>
+        <input type="number" id="count" value="30" min="1" max="100">
+      </div>
+
+      <div class="form-group checkbox-group">
+        <label>
+          <input type="checkbox" id="enableAI">
+          启用AI评分（会消耗API额度，仅对前20个可用域名评分）
+        </label>
+      </div>
+
+      <button id="generateBtn" class="btn-primary">
+        <span class="btn-text">🚀 开始生成</span>
+      </button>
+    </div>
+
+    <div id="results" class="results-panel" style="display: none;">
+      <h2>生成结果</h2>
+      
+      <div class="stats">
+        <div class="stat-card">
+          <div class="stat-value" id="totalGenerated">0</div>
+          <div class="stat-label">总生成数</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value" id="totalAvailable">0</div>
+          <div class="stat-label">可用域名</div>
+        </div>
+        <div class="stat-card" id="scoredCard" style="display: none;">
+          <div class="stat-value" id="totalScored">0</div>
+          <div class="stat-label">AI评分数</div>
+        </div>
+      </div>
+
+      <div id="topDomains" class="top-domains"></div>
+    </div>
+
+    <div id="loading" class="loading" style="display: none;">
+      <div class="spinner"></div>
+      <p id="loadingText">正在生成域名...</p>
+    </div>
+
+    <div id="logs" class="logs-panel">
+      <h3>运行日志</h3>
+      <div id="logContent" class="log-content"></div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
