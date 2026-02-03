@@ -3,3 +3,5 @@ node_modules/
 *.log
 results/*.md
 .DS_Store
+.vercel
+.env*.local
