@@ -205,14 +205,8 @@ app.post('/api/generate', async (req, res) => {
 // 初始化数据库
 await initDatabase();
 
-// 仅在非 Vercel 环境下启动服务器
-if (process.env.VERCEL !== '1') {
-  app.listen(PORT, () => {
-    console.log(`\n🚀 域名生成器已启动`);
-    console.log(`📱 访问地址: http://localhost:${PORT}`);
-    console.log(`⚙️  API端点: http://localhost:${PORT}/api/generate\n`);
-  });
-}
-
-// 导出 app 供 Vercel 使用
-export default app;
+app.listen(PORT, () => {
+  console.log(`\n🚀 域名生成器已启动`);
+  console.log(`📱 访问地址: http://localhost:${PORT}`);
+  console.log(`⚙️  API端点: http://localhost:${PORT}/api/generate\n`);
+});
