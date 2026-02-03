@@ -23,9 +23,5 @@
       "src": "/(.*)",
       "dest": "server.js"
     }
-  ],
-  "env": {
-    "OPENROUTER_API_KEY": "@openrouter_api_key",
-    "DATABASE_URL": "@database_url"
-  }
+  ]
 }
