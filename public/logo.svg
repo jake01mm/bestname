@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 100">
+  <defs>
+    <linearGradient id="textGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#ff6b6b;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#48dbfb;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#a29bfe;stop-opacity:1" />
+    </linearGradient>
+    <filter id="textGlow">
+      <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  
+  <!-- 图标部分 -->
+  <g transform="translate(10, 10)">
+    <!-- 背景圆 -->
+    <circle cx="40" cy="40" r="38" fill="#0a0e27" stroke="url(#textGrad)" stroke-width="3"/>
+    
+    <!-- 域名符号 -->
+    <g filter="url(#textGlow)">
+      <circle cx="25" cy="40" r="5" fill="#48dbfb"/>
+      <path d="M 35 28 L 35 52 L 43 52 Q 55 52 55 40 Q 55 28 43 28 Z" 
+            fill="none" stroke="#ff6b6b" stroke-width="4" stroke-linecap="round"/>
+      
+      <!-- AI 星光 -->
+      <path d="M 60 20 L 61.5 24 L 65.5 25.5 L 61.5 27 L 60 31 L 58.5 27 L 54.5 25.5 L 58.5 24 Z" 
+            fill="#fdcb6e"/>
+      <path d="M 68 38 L 69 41 L 72 42 L 69 43 L 68 46 L 67 43 L 64 42 L 67 41 Z" 
+            fill="#a29bfe"/>
+    </g>
+  </g>
+  
+  <!-- 文字部分 -->
+  <text x="100" y="55" font-family="Arial, sans-serif" font-size="32" font-weight="bold" 
+        fill="url(#textGrad)" filter="url(#textGlow)">
+    DomainAI
+  </text>
+  <text x="100" y="75" font-family="Arial, sans-serif" font-size="12" fill="#48dbfb" opacity="0.8">
+    智能域名生成器
+  </text>
+</svg>
