@@ -2,8 +2,6 @@
 
 const generateBtn = document.getElementById('generateBtn');
 const resultsPanel = document.getElementById('results');
-const loadingOverlay = document.getElementById('loading');
-const loadingText = document.getElementById('loadingText');
 const logContent = document.getElementById('logContent');
 
 let isGenerating = false;
@@ -17,15 +15,20 @@ function addLog(message, type = 'info') {
   logContent.scrollTop = logContent.scrollHeight;
 }
 
-// 显示加载状态
-function showLoading(text) {
-  loadingText.textContent = text;
-  loadingOverlay.style.display = 'flex';
-}
-
-// 隐藏加载状态
-function hideLoading() {
-  loadingOverlay.style.display = 'none';
+// 更新按钮状态
+function setButtonLoading(loading, text = '生成中...') {
+  if (loading) {
+    generateBtn.disabled = true;
+    generateBtn.innerHTML = `
+      <span class="btn-spinner"></span>
+      <span class="btn-text">${text}</span>
+    `;
+    generateBtn.classList.add('loading');
+  } else {
+    generateBtn.disabled = false;
+    generateBtn.innerHTML = '<span class="btn-text">🚀 开始生成</span>';
+    generateBtn.classList.remove('loading');
+  }
 }
 
 // 输入验证和实时反馈
@@ -106,8 +109,11 @@ generateBtn.addEventListener('click', async () => {
       return;
     }
 
-    // 清空日志
+    // 清空日志和结果
     logContent.innerHTML = '';
+    document.getElementById('topDomains').innerHTML = '';
+    resultsPanel.style.display = 'block';
+    
     addLog('🚀 开始生成域名...', 'info');
     addLog(`配置: 起始=${startsWith}, 排除=${excludeLetters.join(',')}, 长度=${fixedLength || `${minLength}-${maxLength}`}, 数量=${count}`, 'info');
     
@@ -115,10 +121,8 @@ generateBtn.addEventListener('click', async () => {
       addLog('⚠️ AI评分已启用，将消耗API额度', 'warning');
     }
 
-    // 禁用按钮
-    generateBtn.disabled = true;
-    generateBtn.innerHTML = '<span class="btn-text">⏳ 生成中...</span>';
-    showLoading('正在生成域名...');
+    // 设置按钮加载状态
+    setButtonLoading(true, '正在生成...');
 
     // 发送请求
     const response = await fetch('/api/generate', {
@@ -152,17 +156,14 @@ generateBtn.addEventListener('click', async () => {
 
     // 显示结果
     displayResults(result.data);
-    hideLoading();
 
   } catch (error) {
     console.error('生成失败:', error);
     addLog(`✗ 生成失败: ${error.message}`, 'error');
     alert('生成失败: ' + error.message);
-    hideLoading();
   } finally {
     isGenerating = false;
-    generateBtn.disabled = false;
-    generateBtn.innerHTML = '<span class="btn-text">🚀 开始生成</span>';
+    setButtonLoading(false);
   }
 });
 
