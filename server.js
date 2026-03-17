@@ -82,8 +82,9 @@ app.post('/api/generate', async (req, res) => {
       maxLength = 15,
       fixedLength = null,
       count = 50,
-      enableAI = false
+      enableAI: _enableAI = false  // AI评分功能暂停
     } = req.body;
+    const enableAI = false; // 暂停AI评分功能
 
     console.log('\n========== 开始新的域名生成任务 ==========');
     console.log(`时间: ${new Date().toLocaleString('zh-CN')}`);
