@@ -1,16 +1,29 @@
 {
-  "name": "domain-name-generator",
+  "name": "bestname",
   "version": "1.0.0",
   "description": "智能域名生成和评分工具",
-  "type": "module",
+  "private": true,
   "scripts": {
-    "dev": "node server.js",
-    "start": "node server.js"
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
   },
   "dependencies": {
     "axios": "^1.6.0",
-    "dotenv": "^16.3.1",
-    "express": "^4.18.2",
-    "pg": "^8.18.0"
+    "bcryptjs": "^2.4.3",
+    "next": "14.2.5",
+    "next-auth": "^4.24.7",
+    "pg": "^8.18.0",
+    "react": "^18",
+    "react-dom": "^18"
+  },
+  "devDependencies": {
+    "@types/bcryptjs": "^2.4.6",
+    "@types/node": "^20",
+    "@types/pg": "^8.18.0",
+    "@types/react": "^18",
+    "@types/react-dom": "^18",
+    "typescript": "^5"
   }
 }
